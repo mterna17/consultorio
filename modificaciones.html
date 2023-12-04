@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modificar paciente</title>
+    <link rel="stylesheet" href="estilos.css">
+    <!-- FAVICON -->
+    <link rel="icon" href="./static/imagenes/favicon-16x16.png">
+</head>
+
+<body>
+    <div>
+        <img src="./static/imagenes/logo cm.png" alt="logo">
+    </div>
+    <div>
+        <!-- <h1>Consultorio Médico</h1> -->
+        <!-- <h3>Modificar paciente</h3> -->
+    </div>
+    <div class="menu">
+        <nav>
+            <ul>
+                <li>
+                    <a href="bdinicio.html">Inicio</a>
+                </li>
+                <li>
+                    <a href="listado.html">Listado de pacientes</a>
+                </li>
+                <li>
+                    <a href="altas.html">Alta de paciente</a>
+                </li>
+                <li>
+                    <a class="activo" href="modificaciones.html">Modificar datos del paciente</a>
+                </li>
+                <li>
+                    <a href="listadoEliminar.html">Eliminar paciente</a>
+                </li>
+                <li>
+                    <a class="back" href="./index.html">Volver al sitio</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div id="app">
+        <form @submit.prevent="obtenerProducto">
+            <label for="dni">DNI:</label>
+            <input type="text" v-model="dni" required><br>
+            <button type="submit">Modificar paciente</button>
+            <!-- <a href="index.html">Menu principal</a> -->
+        </form>
+
+        <div v-if="mostrarDatosProducto">
+            <h2>Datos del paciente</h2>
+            <form @submit.prevent="guardarCambios">
+                <label for="apellidoModificar">Apellido:</label>
+                <input type="text" id="apellidoModificar" v-model="apellido" required><br>
+
+                <label for="nombreModificar">Nombre:</label>
+                <input type="text" id="nombreModificar" v-model="nombre" required><br>
+
+                <label for="edadModificar">Edad:</label>
+                <input type="number" id="edadModificar" v-model="edad" required><br>
+
+                <!-- Imagen actual del producto -->
+                <!-- <img v-if="imagen_url && !imagenSeleccionada" :src="'./static/imagenes/' + imagen_url"
+                    alt="Imagen del producto" style="max-width: 200px;"> -->
+
+                <!-- Vista previa de la nueva imagen seleccionada -->
+                <!-- <img v-if="imagenSeleccionada" :src="imagenUrlTemp" alt="Vista previa de la nueva imagen"
+                    style="max-width: 200px;"> -->
+
+                <!-- Input para nueva imagen -->
+                <!-- <label for="nuevaImagen">Nueva Imagen:</label>
+                <input type="file" id="nuevaImagen" @change="seleccionarImagen"><br> -->
+
+                <label for="especialidadModificar">Especialidad:</label>
+                <input type="text" id="especialidadModificar" v-model="especialidad" required><br>
+
+                <label for="diagnosticoModificar">Diagnóstico:</label>
+                <input type="text" id="diagnosticoModificar" v-model="diagnostico" required><br>
+
+                <button type="submit">Guardar Cambios</button>
+                <a href="modificaciones.html">Cancelar</a>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>
+        const URL = "http://127.0.0.1:5000/"
+
+        //Vue.createApp para crear nuestra aplicación Vue.
+        const app = Vue.createApp({
+            
+            //Dentro de data(), definimos las propiedades que serán utilizadas en nuestra aplicación: codigo para almacenar el código del producto, mostrarDatosProducto para controlar la visibilidad del formulario de modificación, y descripcion, cantidad y precio para almacenar los datos del producto seleccionado.
+            data() {
+                return {
+                    dni: '',
+                    apellido: '',
+                    nombre: '',
+                    edad: '',
+                    especialidad: '',
+                    diagnostico: '',
+                    // imagenSeleccionada: null,
+                    // imagenUrlTemp: null,
+                    mostrarDatosProducto: false,
+                };
+            },
+
+            methods: {
+                //Se ejecuta cuando se envía el formulario de consulta. En este método, utilizamos fetch para realizar una solicitud GET a la API y obtener los datos del producto correspondiente al código ingresado.
+                obtenerProducto() {
+                    fetch(URL + 'productos/' + this.dni)
+                        
+                        //Verificamos si la respuesta de la solicitud es exitosa (código de respuesta 200-299). Si es así, utilizamos response.json() para parsear la respuesta en formato JSON.
+                        .then(response =>  {
+                            if (response.ok) {
+                                return response.json()
+                            } else {
+                                //Si la respuesta es un error, lanzamos una excepción para ser "catcheada" más adelante en el catch.
+                                throw new Error('Error al obtener los datos del paciente.')
+                            }
+                        })
+
+                        .then(data => {
+                            this.apellido = data.apellido;
+                            this.nombre = data.nombre;
+                            this.edad = data.edad;
+                            this.especialidad = data.especialidad;
+                            this.diagnostico =  data.diagnostico;
+                            this.mostrarDatosProducto = true;
+                        })
+                        .catch(error => {
+                            alert('Paciente no encontrado.')
+                        })
+                },
+                seleccionarImagen(event) {
+                    const file = event.target.files[0];
+                    this.imagenSeleccionada = file;
+                    this.imagenUrlTemp = URL.createObjectURL(file); // Crea una URL temporal para la vista previa
+                },
+                guardarCambios() {
+                    const formData = new FormData();
+                    formData.append('dni', this.dni);
+                    formData.append('apellido', this.apellido);
+                    formData.append('nombre', this.nombre);
+                    formData.append('edad', this.edad);
+                    formData.append('especialidad', this.especialidad);
+                    formData.append('diagnostico', this.diagnostico);
+
+                    // if (this.imagenSeleccionada) {
+                    //     formData.append('imagen', this.imagenSeleccionada, this.imagenSeleccionada.name);
+                    // }
+
+                    //Utilizamos fetch para realizar una solicitud PUT a la API y guardar los cambios.
+                    fetch(URL + 'productos/' + this.dni, {
+                        method: 'PUT',
+                        body: formData,
+                    })
+                        .then(response => {
+                            //Si la respuesta es exitosa, utilizamos response.json() para parsear la respuesta en formato JSON.
+                            if (response.ok) {
+                                return response.json()
+                            } else {
+                                //Si la respuesta es un error, lanzamos una excepción.
+                                throw new Error('Error al guardar los cambios del paciente.')
+                            }
+                        })
+                        .then(data => {
+                            alert('Paciente actualizado correctamente.');
+                            this.limpiarFormulario();
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Error al actualizar el paciente.');
+                        });
+                },
+                limpiarFormulario() {
+                    this.codigo = '';
+                    this.apellido = '';
+                    this.nombre = '';
+                    this.edad = '';
+                    this.especialidad = '';
+                    this.diagnostico = '';
+                    // this.imagenSeleccionada = null;
+                    // this.imagenUrlTemp = null;
+                    this.mostrarDatosProducto = false;
+                }
+            }
+        });
+
+        app.mount('#app');
+    </script>
+
+</body>
+</html>

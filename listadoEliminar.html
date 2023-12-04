@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baja de paciente</title>
+    <link rel="stylesheet" href="estilos.css">
+    <!-- FAVICON -->
+    <link rel="icon" href="./static/imagenes/favicon-16x16.png">
+</head>
+
+<body>
+    <div>
+        <img src="./static/imagenes/logo cm.png" alt="logo">
+    </div>
+    <div>
+        <!-- <h1>Consultorio Médico</h1> -->
+        <!-- <h3>Baja de paciente</h3> -->
+    </div>
+    <div class="menu">
+        <nav>
+            <ul>
+                <li>
+                    <a href="bdinicio.html">Inicio</a>
+                </li>
+                <li>
+                    <a href="listado.html">Listado de pacientes</a>
+                </li>
+                <li>
+                    <a href="altas.html">Alta de paciente</a>
+                </li>
+                <li>
+                    <a href="modificaciones.html">Modificar datos del paciente</a>
+                </li>
+                <li>
+                    <a class="activo" href="listadoEliminar.html">Eliminar paciente</a>
+                </li>
+                <li>
+                    <a class="back" href="./index.html">Volver al sitio</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th align="right">DNI&emsp;</th>
+                <th align="left">Apellido&emsp;&emsp;&emsp;</th>
+                <th align="left">Nombre&emsp;&emsp;&emsp;</th>
+                <th align="center">&emsp;Edad&emsp;</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="producto in productos">
+                <td align="right">{{ producto.dni }}&emsp;</td>
+                <td align="left">{{ producto.apellido }}</td>
+                <td align="left">{{ producto.nombre }}</td>
+                <td align="center">{{ producto.edad }}</td>
+                <td><button @click="eliminarProducto(producto.dni)">Eliminar</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- <div class="contenedor-centrado">
+        <a href="index.html">Menu principal</a>
+    </div> -->
+
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>
+        const URL = "http://127.0.0.1:5000/"
+
+        const app = Vue.createApp({
+            data() {
+                return {
+                    productos: []
+                }
+            },
+            methods: {
+                obtenerProductos() {
+                    // Obtenemos el contenido del inventario
+                    fetch(URL + 'productos')
+                        .then(response => {
+                             // Parseamos la respuesta JSON 
+                            if (response.ok) { return response.json();}
+                        })
+                        .then(data => {
+                            // El código Vue itera este elemento para generar la tabla
+                            this.productos = data;
+                        })
+                        .catch(error => {
+                            console.log('Error:', error);
+                            alert('Error al obtener los productos.');
+                        });
+                },
+                eliminarProducto(dni) {
+                    if (confirm('¿Estás seguro de que quieres eliminar este paciente?')) {
+                        fetch(URL + `productos/${dni}`, { method: 'DELETE' })
+                            .then(response => {
+                                if (response.ok) {
+                                    this.productos = this.productos.filter(producto => producto.dni !== dni);
+                                    alert('Paciente eliminado correctamente.');
+                                }
+                            })
+                            .catch(error => {
+                                alert(error.message);
+                            });
+                    }
+                }
+            },
+            mounted() {
+                //Al cargar la página, obtenemos la lista de productos
+                this.obtenerProductos();
+            }
+        });
+
+        app.mount('body');
+    </script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de pacientes</title>
+    <link rel="stylesheet" href="estilos.css">
+    <!-- FAVICON -->
+    <link rel="icon" href="./static/imagenes/favicon-16x16.png">
+</head>
+
+<body>
+    <div>
+        <img src="./static/imagenes/logo cm.png" alt="logo">
+    </div>
+    <div>
+        <!-- <h1>Consultorio Médico</h1> -->
+        <!-- <h3>Listado de pacientes</h3> -->
+    </div>
+    <div class="menu">
+        <nav>
+            <ul>
+                <li>
+                    <a href="bdinicio.html">Inicio</a>
+                </li>
+                <li>
+                    <a class="activo" href="listado.html">Listado de pacientes</a>
+                </li>
+                <li>
+                    <a href="altas.html">Alta de paciente</a>
+                </li>
+                <li>
+                    <a href="modificaciones.html">Modificar datos del paciente</a>
+                </li>
+                <li>
+                    <a href="listadoEliminar.html">Eliminar paciente</a>
+                </li>
+                <li>
+                    <a class="back" href="./index.html">Volver al sitio</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th align="right">DNI&emsp;</th>
+                <th align="left">Apellido&emsp;&emsp;&emsp;</th>
+                <th align="left">Nombre&emsp;&emsp;&emsp;</th>                
+                <th align="center">&emsp;Edad&emsp;</th>
+                <th align="left">Especialidad&emsp;&emsp;&emsp;</th>
+                <th align="left">Diagnóstico&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</th>
+                
+            </tr>
+        </thead>
+        <tbody id="tablaProductos"> </tbody>
+    </table>
+
+    <!-- <div class="contenedor-centrado">
+        <a href="index.html">Menu principal</a>
+    </div> -->
+
+    <script>
+        const URL = "http://127.0.0.1:5000/"
+
+        // Realizamos la solicitud GET al servidor para obtener todos los productos
+        fetch(URL + 'productos')
+            .then(function (response) {
+                if (response.ok) {
+                    return response.json(); 
+            } else {
+                    // Si hubo un error, lanzar explícitamente una excepción
+                    // para ser "catcheada" más adelante
+                    throw new Error('Error al obtener los productos.');
+                }
+            })
+            .then(function (data) {
+                let tablaProductos = document.getElementById('tablaProductos');
+
+                // Iteramos sobre los productos y agregamos filas a la tabla
+                for (let producto of data) {
+                    let fila = document.createElement('tr');
+                    fila.innerHTML = '<td align="right">' + producto.dni + '&emsp;' + '</td>' +
+                        '<td align="left">' + producto.apellido + '</td>' +
+                        '<td>' + producto.nombre + '</td>' +
+                        '<td align="center">' + producto.edad + '</td>' +
+                        '<td align="left">' + producto.especialidad + '</td>' +
+                        // Mostrar miniatura de la imagen
+                        // '<td><img src=./static/imagenes/' + producto.imagen_url +' alt="Imagen del producto" style="width: 100px;"></td>' +
+                        '<td align="left">' + producto.diagnostico + '</td>';
+                    
+                    //Una vez que se crea la fila con el contenido del producto, se agrega a la tabla utilizando el método appendChild del elementotablaProductos.
+                    tablaProductos.appendChild(fila);
+                }
+            })
+            .catch(function (error) {
+                // Código para manejar errores
+                alert('Error al obtener los productos.');
+            });
+    </script>
+</body>
+</html>

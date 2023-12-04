@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar paciente</title>
+    <link rel="stylesheet" href="estilos.css">
+    <!-- FAVICON -->
+    <link rel="icon" href="./static/imagenes/favicon-16x16.png">
+</head>
+
+<body>
+    <div>
+        <img src="./static/imagenes/logo cm.png" alt="logo">
+    </div>
+    <div>
+        <!-- <h1>Consultorio Médico</h1> -->
+        <!-- <h3>Agregar paciente</h3> -->
+    </div>
+    <div class="menu">
+        <nav>
+            <ul>
+                <li>
+                    <a href="bdinicio.html">Inicio</a>
+                </li>
+                <li>
+                    <a href="listado.html">Listado de pacientes</a>
+                </li>
+                <li>
+                    <a class="activo" href="altas.html">Alta de paciente</a>
+                </li>
+                <li>
+                    <a href="modificaciones.html">Modificar datos del paciente</a>
+                </li>
+                <li>
+                    <a href="listadoEliminar.html">Eliminar paciente</a>
+                </li>
+                <li>
+                    <a class="back" href="./index.html">Volver al sitio</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <!--enctype="multipart/form-data" es necesario para enviar archivos al back.-->
+    <form id="formulario" enctype="multipart/form-data">
+        <label for="dni">DNI:</label>
+        <input type="text" id="dni" name="dni" required><br>
+
+        <label for="apellido">Apellido:</label>
+        <input type="text" id="apellido" name="apellido" required><br>
+
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required><br>
+
+        <label for="edad">Edad:</label>
+        <input type="number" id="edad" name="edad" required><br>
+
+        <label for="especialidad">Especialidad:</label>
+        <input type="text" id="especialidad" name="especialidad">
+
+        <label for="diagnostico">Diagnóstico:</label>
+        <input type="text" id="diagnostico" name="diagnostico">
+        
+        <button type="submit">Agregar Paciente</button>
+        <!-- <a href="index.html">Menu principal</a> -->
+    </form>
+
+    <script>
+        const URL = "http://127.0.0.1:5000/"
+
+        // Capturamos el evento de envío del formulario
+        document.getElementById('formulario').addEventListener('submit', function (event) {
+            event.preventDefault(); // Evitamos que se envie el form 
+
+            var formData = new FormData();
+            formData.append('dni', document.getElementById('dni').value);
+            formData.append('apellido', document.getElementById('apellido').value);
+            formData.append('nombre', document.getElementById('nombre').value);
+            formData.append('edad', document.getElementById('edad').value);
+            formData.append('especialidad', document.getElementById('especialidad').value);
+            formData.append('diagnostico', document.getElementById('diagnostico').value);
+            
+            // Realizamos la solicitud POST al servidor
+            fetch(URL + 'productos', {
+                method: 'POST',
+                body: formData // Aquí enviamos formData en lugar de JSON
+            })
+
+                //Después de realizar la solicitud POST, se utiliza el método then() para manejar la respuesta del servidor.
+                .then(function (response) {
+                    if (response.ok) { 
+                        return response.json(); 
+                    } else {
+                        // Si hubo un error, lanzar explícitamente una excepción
+                        // para ser "catcheada" más adelante
+                        throw new Error('Error al agregar el paciente.');
+                    }
+                })
+
+                //Respuesta OK, se limpia formulario.
+                .then(function (data) {
+                    alert('Paciente agregado correctamente.');
+                })
+                .catch(function (error) {
+                    // Mostramos el error, y no limpiamos el form.
+                    alert('Error al agregar el paciente.');
+                })
+                .finally(function () {
+                    // Limpiar el formulario en ambos casos (éxito o error)
+                    document.getElementById('dni').value = "";
+                    document.getElementById('apellido').value = "";
+                    document.getElementById('nombre').value = "";
+                    document.getElementById('edad').value = "";
+                    document.getElementById('especialidad').value = "";
+                    document.getElementById('diagnostico').value = "";
+                });
+        })
+    </script>
+</body>
+
+</html>

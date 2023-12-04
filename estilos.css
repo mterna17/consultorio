@@ -1,0 +1,201 @@
+* {
+    /* La propiedad border-box recalcula el ancho de una caja para que el width sea la estrictamente la suma de border + padding + ancho o altura que sea necesario para que se cumpla. */
+    box-sizing: border-box;
+}
+
+/* Paleta de colores */
+:root{
+    --colorwhite: rgb(255,255,255);
+    --colorblack: rgb(0,0,0);
+    --color1: rgb(103,142,149);
+    --color2: #7dbaeb;
+    --color3: #5c8bb3;
+    --color4: rgb(7, 7, 94);
+    --color5: rgb(140, 180, 131);
+}
+
+/* Estilos para todo el proyecto */
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--colorwhite)
+}
+
+.contenedor-centrado {
+    display:flex;
+    width: 100%;
+    justify-content: center;
+}
+
+p {
+    font-family: 'Times New Roman', Times, serif;
+    background-color: var(--colorwhite);
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    text-align: center;
+    color: var(--colortexto);
+}
+
+form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: var(--colorwhite);
+    border: 1px solid var(--color1);
+    border-radius: 5px;
+}
+
+table {
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: var(--colorwhite);
+    border: 1px solid var(--color1);
+    border-radius: 5px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid var(--color1);
+    border-radius: 5px;
+}
+
+input[type="submit"] {
+    padding: 10px;
+    background-color: var(--color2);
+    color: var(--colorwhite);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: var(--color2);
+}
+
+button {
+    padding: 8px;
+    margin:4px;
+    background-color: var(--color4);
+    color: var(--colorwhite);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: var(--color3);
+}
+
+a {
+    padding: 8px;
+    margin:4px;
+    background-color: var(--color2);
+    color: var(--colorwhite);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 85%;
+}
+
+/* a:hover {
+    background-color: var(--color3);
+} */
+
+div{
+    text-align: center;
+    position: center center;
+}
+
+/* -------------------------- */
+
+nav{
+    width: 100%;
+    display: flex ;
+    justify-content: space-evenly;
+    border-radius: 2cqb;
+    background-color: var(--color2);
+}
+
+nav ul {
+    list-style: none;
+    overflow: hidden; 
+}
+
+nav ul li {
+    float: left;
+}
+
+nav ul li a {
+    display: block; 
+    justify-content: space-around;
+    padding-inline: 15px;
+    color: rgb(253, 251, 251);
+    font-size: 17px;
+    text-decoration: none;
+}
+
+nav ul li a:hover {
+    background-color: var(--color3);
+}
+
+nav ul li a.activo{
+    background-color: var(--color3);
+}
+
+nav ul li a.back{
+    border: solid white 2px;
+    background-color: var(--color4);
+}
+
+nav ul li a.back:hover{
+    background-color: var(--color3);
+}
+
+div div form a {
+    background-color: var(--color4);
+}
+
+div div form a:hover {
+    background-color: var(--color3);
+}
+
+body{
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+    gap: 10px;
+}
+
+div.menu a{
+    padding: 5px;
+    margin: 0px 10px;
+    border: 0;
+}
+
+table{
+    margin-top: 10px;
+}
+
+#app{
+    margin-top: 10px;
+}
+
+#formulario{
+    margin-top: 10px;
+}
+
+
