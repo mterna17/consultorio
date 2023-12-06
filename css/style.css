@@ -535,3 +535,8 @@ div.footer ul li a:hover {
 
     }
 }
+
+a.nav_link_bd img{
+    width: 25px;
+    filter: invert(90%) sepia(7%) saturate(514%) hue-rotate(72deg) brightness(118%) contrast(96%);
+}
